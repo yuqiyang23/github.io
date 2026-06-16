@@ -22,8 +22,9 @@
   --water-deep:#13313a;
   --water:#1f5560;
   --water-lit:#7fc6c9;
-  --serif:'Georgia','Times New Roman',serif;
-  --sans:'Helvetica Neue',Arial,sans-serif;
+  --serif:'Palatino Linotype','Palatino','Book Antiqua','Georgia',serif;
+  --sans:'Helvetica Neue','Segoe UI',Arial,sans-serif;
+  --mono:'Courier New',ui-monospace,monospace;
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -65,6 +66,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:
 .hero-name .ln span{display:block;transform:translateY(110%);animation:rise 1.3s cubic-bezier(.2,.8,.2,1) forwards}
 .hero-name .ln:nth-child(2) span{animation-delay:.12s}
 @keyframes rise{to{transform:translateY(0)}}
+.hero-bio{position:absolute;top:58%;left:7.2%;max-width:min(46ch,42vw);font-family:var(--serif);
+  font-size:clamp(13px,1.15vw,16px);line-height:1.7;color:rgba(244,241,230,.92);opacity:0;
+  animation:fade 1.6s ease .7s forwards;text-shadow:0 2px 18px rgba(0,0,0,.8)}
 .hero-role{position:absolute;top:18%;left:7.4%;transform:translateY(-150%);font-family:var(--sans);
   font-size:clamp(11px,1.1vw,14px);letter-spacing:.42em;text-transform:uppercase;color:var(--sun);
   opacity:0;animation:fade 1.4s ease .5s forwards;text-shadow:0 2px 16px rgba(0,0,0,.7)}
@@ -97,7 +101,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:
 .hill-ver button:hover{border-color:rgba(244,241,230,.8)}
 .hill-ver button[aria-current="true"]{background:var(--sun-warm);color:#1a280f;border-color:var(--sun-warm)}
 .hill-head{position:absolute;top:11%;left:7%;z-index:8}
-.eyebrow{font-family:var(--sans);font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:var(--moss);margin-bottom:14px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--moss);
+  margin-bottom:16px;display:inline-flex;align-items:center;gap:10px;font-weight:700}
+.eyebrow::before{content:'';width:24px;height:1px;background:currentColor;opacity:.6;display:inline-block}
+/* indication d'action (différenciée de la phrase d'intro) */
+.hint{display:block;margin-top:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;font-style:normal;opacity:.62}
+.hint::before{content:'→ ';opacity:.7}
 .hill-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4.4vw,62px);color:#f4f1e6;line-height:1;text-shadow:0 2px 24px rgba(0,0,0,.5)}
 .hill-head p{font-family:var(--serif);font-style:italic;font-size:clamp(13px,1.3vw,18px);color:rgba(244,241,230,.85);margin-top:14px;max-width:30ch;text-shadow:0 2px 16px rgba(0,0,0,.5)}
 .hill-svg{position:absolute;inset:0;width:100%;height:100%}
@@ -117,6 +127,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:
 .exp-card h3{font-family:var(--serif);font-size:clamp(19px,2.1vw,27px);color:var(--leaf-deep);font-weight:400;line-height:1.12}
 .exp-card .org{font-family:var(--sans);font-size:12.5px;color:var(--moss);margin:6px 0 13px;letter-spacing:.02em}
 .exp-card .desc{font-family:var(--serif);font-size:clamp(13.5px,1.25vw,15.5px);line-height:1.6;color:#26331f}
+.exp-card .desc .intro{font-style:italic;color:#4a5d3a;margin-bottom:13px;padding-bottom:13px;
+  border-bottom:1px solid rgba(63,94,52,.18);line-height:1.55}
 .exp-card .desc ul{list-style:none;margin:0;padding:0}
 .exp-card .desc li{position:relative;padding-left:18px;margin-bottom:9px}
 .exp-card .desc li:last-child{margin-bottom:0}
@@ -142,6 +154,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:
 .beam:hover .halo,.beam.on .halo{transform:scale(1.15);opacity:1}
 .beam .core{width:14px;height:14px;border-radius:50%;background:var(--sun);box-shadow:0 0 18px 6px rgba(243,231,196,.6);transition:transform .4s}
 .beam:hover .core,.beam.on .core{transform:scale(1.4)}
+.beam .beam-label{position:absolute;top:calc(50% + 16px);left:50%;transform:translateX(-50%);white-space:nowrap;
+  font-family:var(--sans);font-size:11px;letter-spacing:.06em;color:#fff;font-weight:600;pointer-events:none;
+  text-shadow:0 1px 6px rgba(0,0,0,.95),0 0 16px rgba(0,0,0,.8);opacity:.85;transition:opacity .35s,color .35s}
+.beam:hover .beam-label,.beam.on .beam-label{opacity:1;color:var(--sun)}
+/* sur mobile, on masque les labels permanents (place réduite) ; le tap affiche le détail */
+@media (max-width:760px){ .beam .beam-label{display:none} }
 .skill-panel{position:absolute;left:50%;bottom:8%;transform:translateX(-50%) translateY(24px);z-index:20;
   width:min(560px,84vw);text-align:center;opacity:0;pointer-events:none;transition:opacity .6s,transform .6s}
 .skill-panel.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -262,11 +280,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:
       <span class="ln"><span>YANG</span></span>
       <span class="ln"><span>YUQI</span></span>
     </h1>
+    <p class="hero-bio">Franco-chinoise de cœur, je suis linguiste de formation, puis marketeuse de métier.<br>
+      À la Sorbonne, j'ai appris que les mots révèlent les gens. En fintech, j'ai appris que derrière chaque clic, il y a quelqu'un. Ces deux lectures se sont rejointes&nbsp;: comprendre les gens, puis construire les systèmes qui leur parlent.<br>
+      Aujourd'hui, je fais dialoguer la technologie et l'humain. Avec l'IA, je rends cette relation personnelle à grande échelle.</p>
     <div class="hero-contact">
       <span class="lbl">Me contacter</span>
       <a href="mailto:yuqiyang0223@gmail.com">yuqiyang0223@gmail.com</a><br>
       <a href="tel:+33651062774">+33 6 51 06 27 74</a><br>
-      <a href="https://www.linkedin.com/in/yuqiyang-/" target="_blank" rel="noopener">linkedin.com/in/yuqiyang-</a>
+      LinkedIn : <a href="https://www.linkedin.com/in/yuqi-yang-/" target="_blank" rel="noopener">Yuqi YANG</a><br>
+      CV : <a href="https://drive.google.com/file/d/1IJFRVYq2Ab0mulIMoDKb5DC-jhM8gdm3/view?usp=sharing" target="_blank" rel="noopener">Voir mon CV</a>
     </div>
     <div class="scroll-hint">Faites défiler<span class="dot"></span></div>
   </div>
@@ -277,7 +299,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:
   <div class="hill-head">
     <div class="eyebrow">01 — Le parcours</div>
     <h2>La montée</h2>
-    <p>Faites grimper l'écureuil le long du sentier&nbsp;: chaque palier raconte une étape.</p>
+    <p>Chaque palier raconte une étape de mon chemin.<span class="hint">Faites grimper l'écureuil le long du sentier</span></p>
   </div>
   <div class="hill-tip"><span>Glissez vers le haut</span><span class="arrow">↗</span></div>
   <div class="photo-bg" id="hillPhoto"></div>
@@ -297,7 +319,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:
   <div class="light-head">
     <div class="eyebrow">02 — Les compétences</div>
     <h2>Lumière filtrée</h2>
-    <p>La lumière traverse les feuilles. Touchez chaque rai pour révéler un savoir-faire.</p>
+    <p>La lumière traverse les feuilles, et chaque rai révèle un savoir-faire.<span class="hint">Touchez un point de lumière pour en savoir plus</span></p>
   </div>
   <div class="beam-layer" id="beamLayer"></div>
   <div class="skill-panel" id="skillPanel">
@@ -315,7 +337,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:
     <div class="outils-head">
       <div class="eyebrow">03 — La boîte à outils</div>
       <h2>Ma stack IA</h2>
-      <p>Les outils que j'utilise au quotidien, par mission. Survolez une ligne.</p>
+      <p>Les outils qui rythment mon quotidien, classés par mission.<span class="hint">Survolez une ligne</span></p>
     </div>
     <div class="outils-table" id="outilsTable"></div>
   </div>
@@ -363,39 +385,47 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
 /* ---------- DONNÉES (extraites du CV) ---------- */
 const EXPERIENCES = [
-  { yr:'2022', title:'Chargée de communication', org:'Stage · Think Tank CCG · Center for China and Globalization · Pékin',
+  { yr:'2022', title:'Chargée de communication', org:'Stage · Think Tank CCG · Pékin',
+    intro:"Le CCG (Center for China and Globalization) est l'un des principaux think tanks indépendants de Chine, classé parmi les plus influents au monde sur les questions de mondialisation.",
     points:[
-      "Newsletters bilingues EN/CH et animation du LinkedIn du think tank",
+      "Mes premières armes en communication : newsletters bilingues EN/CH et animation du LinkedIn de l'institution",
       "Production de plus de 30 visuels et vidéos",
-      "Premier pas dans la communication digitale à l'international"
+      "C'est là qu'est née mon envie de raconter des idées complexes simplement"
     ] },
   { yr:'2022 — 2025', title:'Sciences du langage', org:'Licence & Master · Sorbonne Université · Paris',
+    intro:"La Sorbonne n'a plus besoin d'être présentée : l'une des plus anciennes et prestigieuses universités au monde, référence en lettres et sciences humaines.",
     points:[
-      "Mémoire de recherche de 179 pages",
-      "Exigence rédactionnelle et sensibilité linguistique",
-      "Des fondations qui irriguent aujourd'hui chaque contenu et chaque campagne"
+      "Un mémoire de recherche de 179 pages en sciences du langage",
+      "Une école de rigueur et de nuance",
+      "Elle forge aujourd'hui mon exigence rédactionnelle et ma manière de penser chaque message"
     ] },
-  { yr:'2024', title:'Créatrice de contenus réseaux sociaux', org:'Freelance · Rednote · Paris',
+  { yr:'2024', title:'Créatrice de contenus', org:'Freelance · Rednote (Xiaohongshu) · Paris',
+    intro:"Rednote, c'est le réseau social lifestyle qui façonne les goûts de toute une génération en Chine, mêlant recommandation et communauté.",
     points:[
       "Contenus gastronomie et lifestyle parisien pour une audience francophone-asiatique",
-      "16 k+ interactions générées",
-      "Partenariats marques : Saugella, Vitavea, Codifra"
+      "16 k+ interactions et des partenariats marques (Saugella, Vitavea, Codifra)",
+      "J'y ai appris à créer ce qui donne envie"
     ] },
-  { yr:'2025', title:'Conseillère de vente', org:'CDD · Galeries Lafayette · Polare · Paris',
+  { yr:'2025', title:'Conseillère de vente VIP', org:'CDD · Galeries Lafayette (Polare) · Paris',
+    intro:"Les Galeries Lafayette, grand magasin emblématique du luxe à la française, où l'expérience client est un art.",
     points:[
-      "Gestion et fidélisation d'un portefeuille de clients VIP/VIC en retail premium",
-      "Animation digitale de la marque (Instagram/Rednote, 4 publications/semaine)",
-      "Activations terrain (offres, PLV, pop-up) et veille concurrentielle",
+      "Gestion et fidélisation d'un portefeuille de clients VIP/VIC",
+      "Animation de la marque sur Instagram et Rednote (4 publications/semaine) et activations terrain",
       "Résultat : 2ᵉ chiffre d'affaires de la catégorie beauté"
     ] },
-  { yr:'2025 — 2026', title:'Marketing & Communication Digitale', org:'Alternance · Euodia · Neuilly-sur-Seine · en parallèle du MS à NEOMA',
+  { yr:'2025 — 2026', title:'MS Études & Décision Marketing', org:'NEOMA Business School · Paris',
+    intro:"NEOMA est l'une des grandes écoles de commerce françaises (triple accréditation), reconnue pour son excellence en marketing et en management.",
     points:[
-      "Campagnes CRM & marketing automation (Brevo) : scénarios automatisés, segmentation, A/B tests. Newsletter refondue : 9 k+ destinataires, 47% d'ouverture, 98,6% de délivrabilité, RGPD",
-      "Pipeline de lead management automatisé (n8n)",
-      "Production de contenus par IA : emailings, articles SEO, podcast et vidéos animées (ElevenLabs, Google Flow)",
-      "Prospection LinkedIn automatisée (Waalaxy) : 55 k+ invitations, 86 RDV qualifiés, 6 signatures sur 4 mois",
-      "2 landing pages livrées (SEMrush, GTM) et appui sur les campagnes Google Ads",
-      "Outils internes propulsés par IA (Claude) : classement commercial mensuel réduit de 2 jours à 2 heures (-87%)"
+      "MS Études et Décision Marketing : marketing digital, CRM et data marketing",
+      "Études de marché, stratégie de marque, brand management",
+      "La théorie qui structure ce que je pratique en entreprise"
+    ] },
+  { yr:'2025 — 2026', title:'Marketing, CRM & IA', org:'Alternance · Euodia · Neuilly-sur-Seine',
+    intro:"Euodia est une fintech de gestion de patrimoine, qui conseille ses clients sur leurs investissements avec une approche indépendante.",
+    points:[
+      "Je pilote tout l'écosystème CRM et IA : campagnes Brevo (9 k+ destinataires, 47% d'ouverture)",
+      "Pipeline n8n et prospection LinkedIn automatisée (86 RDV, 6 signatures)",
+      "Contenus générés par IA et un outil interne qui a réduit le reporting commercial de 2 jours à 2 heures (-87%)"
     ] }
 ];
 
@@ -549,16 +579,19 @@ heroInit(); heroStart();
    =========================================================== */
 const SVGNS='http://www.w3.org/2000/svg';
 const hillSvg=document.getElementById('hillSvg');
-const VBW=1440, VBH=810;
+// viewBox dynamique selon l'orientation de l'écran
+let VBW=1440, VBH=810;
 
-// sentier — nouvelle photo : prairie qui monte de gauche-bas vers droite-haut.
-// tracé relevé pour que les nœuds restent au-dessus de la carte (en bas)
-const PATH_D='M 240 560 C 420 540, 600 515, 760 480 S 1080 395, 1300 300';
+// deux tracés : paysage (desktop) et portrait (mobile)
+const PATH_DESKTOP='M 240 560 C 420 540, 600 515, 760 480 S 1080 395, 1300 300';
+// mobile : viewBox 800x1400, le sentier serpente du bas vers le haut (tous les nœuds visibles)
+const PATH_MOBILE='M 170 1280 C 320 1200, 360 1080, 320 980 S 220 820, 300 720 S 520 600, 480 480 S 320 320, 430 200';
+let PATH_D=PATH_DESKTOP;
+
+function isMobile(){ return window.matchMedia('(max-width:760px)').matches; }
 
 function buildHill(){
   hillSvg.innerHTML='';
-  // fond transparent : la photo réelle est derrière (CSS).
-  // ombre douce du sentier pour le détacher de l'herbe
   const trailShadow=document.createElementNS(SVGNS,'path');
   trailShadow.setAttribute('id','trailShadow');
   trailShadow.setAttribute('d',PATH_D);trailShadow.setAttribute('fill','none');
@@ -572,6 +605,26 @@ function buildHill(){
   trail.setAttribute('opacity','.9');hillSvg.appendChild(trail);
 
   return trail;
+}
+
+// (re)configure viewBox + tracé selon l'écran, puis repositionne nœuds et écureuil
+function setupHillLayout(){
+  const mob=isMobile();
+  if(mob){ VBW=800; VBH=1400; PATH_D=PATH_MOBILE; hillSvg.setAttribute('preserveAspectRatio','xMidYMid slice'); }
+  else { VBW=1440; VBH=810; PATH_D=PATH_DESKTOP; hillSvg.setAttribute('preserveAspectRatio','xMidYMid slice'); }
+  hillSvg.setAttribute('viewBox', `0 0 ${VBW} ${VBH}`);
+  const sh=document.getElementById('trailShadow'); if(sh) sh.setAttribute('d',PATH_D);
+  if(trailPath){ trailPath.setAttribute('d',PATH_D); PATH_LEN=trailPath.getTotalLength();
+    // repositionner les nœuds
+    if(typeof nodeEls!=='undefined'){
+      nodeEls.forEach(n=>{ const pt=trailPath.getPointAtLength(n.t*PATH_LEN);
+        n.ring.setAttribute('cx',pt.x); n.ring.setAttribute('cy',pt.y);
+        n.dot.setAttribute('cx',pt.x);  n.dot.setAttribute('cy',pt.y);
+        n.label.setAttribute('x',pt.x); n.label.setAttribute('y',pt.y-24);
+      });
+    }
+    placeCyclist(cyclistT);
+  }
 }
 
 const trailPath=buildHill();
@@ -701,11 +754,16 @@ let shownExp=-1;
 function showExp(i){ if(i===shownExp&&expCard.classList.contains('show'))return; shownExp=i;
   const e=EXPERIENCES[i]; expYr.textContent=e.yr; expTitle.textContent=e.title;
   expOrg.textContent=e.org;
-  expDesc.innerHTML = '<ul>'+e.points.map(p=>'<li>'+p+'</li>').join('')+'</ul>';
+  expDesc.innerHTML = (e.intro?'<p class="intro">'+e.intro+'</p>':'')
+    + '<ul>'+e.points.map(p=>'<li>'+p+'</li>').join('')+'</ul>';
   expCard.classList.add('show'); }
 function hideExp(){ expCard.classList.remove('show'); shownExp=-1; }
 
 placeCyclist(0); hideExp();
+// configuration responsive du parcours (desktop / mobile)
+setupHillLayout();
+let _hillResizeT;
+window.addEventListener('resize',()=>{ clearTimeout(_hillResizeT); _hillResizeT=setTimeout(setupHillLayout,200); });
 
 /* ===========================================================
    03 · LUMIÈRE — canvas de rais + points de compétences
@@ -759,7 +817,7 @@ SKILLS.forEach((s,i)=>{
   b.style.left=s.x+'%'; b.style.top=s.y+'%';
   const sz=120+(i%3)*30; b.style.width=sz+'px'; b.style.height=sz+'px';
   b.style.transform='translate(-50%,-50%)';
-  b.innerHTML='<div class="halo"></div><div class="core"></div>';
+  b.innerHTML='<div class="halo"></div><div class="core"></div><div class="beam-label">'+s.name+'</div>';
   b.addEventListener('click',()=>selectSkill(i,b));
   beamLayer.appendChild(b); s._el=b;
 });
@@ -810,7 +868,7 @@ let wordTimers=[];
 function clearWords(){ floatLayer.innerHTML=''; wordTimers.forEach(t=>clearTimeout(t)); wordTimers=[]; }
 function launchWord(text,delay){
   const t=setTimeout(()=>{
-    if(current!==3) return;
+    if(current!==4) return;
     const el=document.createElement('div');
     el.className='float-word'; el.textContent=text;
     const top= Math.random()<.5 ? (8+Math.random()*22) : (70+Math.random()*20); // évite le centre
@@ -824,7 +882,7 @@ function launchWord(text,delay){
     const t0=performance.now();
     (function move(now){
       const k=(now-t0)/dur;
-      if(k>=1||current!==3){ el.remove(); return; }
+      if(k>=1||current!==4){ el.remove(); return; }
       const x=startX+(endX-startX)*k;
       const bob=Math.sin(k*Math.PI*4)*10;
       el.style.transform=`translate(${x}px,${bob}px)`;
